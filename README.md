@@ -61,9 +61,10 @@ Remember, when this editor is disposed(`editor.dispose`), we should **invoke the
 
 ```tsx
 // editor is the result of monaco.editor.create
-const { highlighter, dispose } = monacoJsxSyntaxHighlight.highlighterBuilder({
-    editor: editor,
-})
+const { highlighter, dispose } = monacoJsxSyntaxHighlight.highlighterBuilder(
+  { editor: editor }
+)
+
 // init hightlight
 highlighter()
 
@@ -71,6 +72,29 @@ editor.onDidChangeModelContent(() => {
   // content change, highlight
   highlighter()
 })
+```
+
+```tsx
+interface HighlighterConfig {
+  /**
+   * max jsx tag order loop value
+   * @default 3
+   */
+  jsxTagCycle: number
+  /**
+   * open console to log some error information
+   * @default false
+   */
+  enableConsole?: boolean
+}
+
+type HighlighterBuilder = (context: {
+    editor: any;
+    filePath?: string;
+}, config?: HighlighterConfig) => {
+    highlighter: (code?: string) => void;
+    dispose: () => void;
+}
 ```
 
 ### Highlight class
