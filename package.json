@@ -1,6 +1,6 @@
 {
   "name": "monaco-jsx-syntax-highlight",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "Highlight the jsx or tsx syntax for monaco editor",
   "keywords": [
     "monaco",
