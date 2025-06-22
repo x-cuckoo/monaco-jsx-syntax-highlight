@@ -85,9 +85,7 @@ test('open element', () => {
 })
 
 test('order', () => {
-  const result = analysis('test.tsx', '<div><div/></div>')
-
-  expect(result.map((item) => item.tokens)).toEqual([
+  expect(analysis('test.tsx', '<div><div/></div>').map((item) => item.tokens)).toEqual([
     // open start <
     [JsxToken.angleBracket, JsxToken.orderTokenPrefix + '-1'],
     // open start >
@@ -106,5 +104,27 @@ test('order', () => {
     [JsxToken.angleBracket, JsxToken.orderTokenPrefix + '-2'],
     // close div order 2
     [JsxToken.tagName, JsxToken.orderTokenPrefix + '-2']
+  ])
+
+  // test for jsxTagCycle
+  expect(analysis('test.tsx', '<div><div/></div>', { jsxTagCycle: 1 }).map((item) => item.tokens)).toEqual([
+    // open start <
+    [JsxToken.angleBracket, JsxToken.orderTokenPrefix + '-1'],
+    // open start >
+    [JsxToken.angleBracket, JsxToken.orderTokenPrefix + '-1'],
+    // open end </
+    [JsxToken.angleBracket, JsxToken.orderTokenPrefix + '-1'],
+    // open end >
+    [JsxToken.angleBracket, JsxToken.orderTokenPrefix + '-1'],
+    // open start div
+    [JsxToken.tagName, JsxToken.orderTokenPrefix + '-1'],
+    // open end div
+    [JsxToken.tagName, JsxToken.orderTokenPrefix + '-1'],
+    // close < order 1
+    [JsxToken.angleBracket, JsxToken.orderTokenPrefix + '-1'],
+    // close /> order 1
+    [JsxToken.angleBracket, JsxToken.orderTokenPrefix + '-1'],
+    // close div order 1
+    [JsxToken.tagName, JsxToken.orderTokenPrefix + '-1']
   ])
 })

@@ -1,4 +1,4 @@
-import { Classification } from './worker/types'
+import { Classification, Config as HighlighterConfig } from './worker/types'
 
 export interface WorkerStringContainer {
   worker: string
@@ -66,7 +66,7 @@ export class MonacoJsxSyntaxHighlight {
     return worker
   }
 
-  public highlighterBuilder = (context: { editor: any; filePath?: string }) => {
+  public highlighterBuilder = (context: { editor: any; filePath?: string }, config?: HighlighterConfig) => {
     const { editor, filePath = editor.getModel().uri.toString() } = context
     const decorationsRef = { current: [] }
 
@@ -105,7 +105,8 @@ export class MonacoJsxSyntaxHighlight {
           this.worker.postMessage({
             code: disposeCode,
             filePath,
-            version: editor.getModel().getVersionId()
+            version: editor.getModel().getVersionId(),
+            config
           })
         })
       },
