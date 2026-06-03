@@ -3,9 +3,9 @@
 [![npm version](https://img.shields.io/npm/v/monaco-jsx-syntax-highlight.svg)](https://www.npmjs.com/package/monaco-jsx-highlighter)
 [![npm downloads](https://img.shields.io/npm/dm/monaco-jsx-syntax-highlight.svg)](https://www.npmjs.com/package/monaco-jsx-highlighter)
 
-Support monaco **jsx/tsx** syntax highlight
+Support monaco **jsx/tsx** syntax highlighting
 
-Monaco only support the jsx **syntax checker**
+Monaco only supports the jsx **syntax checker**
 
 [Live demo](https://codesandbox.io/s/momaco-jsx-tsx-highlight-mp1sby)
 
@@ -18,7 +18,8 @@ $ npm install monaco-jsx-syntax-highlight
 ## Use
 
 The main part of this package is a worker for **analysing jsx syntax**
-So we have to way to init the **Controller class**
+
+So we have two ways to init the **Controller class**
 
 ### Use blob create worker
 
@@ -28,9 +29,9 @@ import { MonacoJsxSyntaxHighlight, getWorker } from 'monaco-jsx-syntax-highlight
 const controller = new MonacoJsxSyntaxHighlight(getWorker(), monaco)
 ```
 
-When using `getWorker` return value as Worker, we can **custom the typescript compile source file url**（for the purpose of **speeding up** load time）
+When using `getWorker` return value as Worker, we can **customize the typescript compile source file url** (for the purpose of **speeding up** load time)
 
-If do not set, the default source is https://cdnjs.cloudflare.com/ajax/libs/typescript/4.6.4/typescript.min.js
+If not set, the default source is https://cdnjs.cloudflare.com/ajax/libs/typescript/5.9.2/typescript.min.js
 
 ```tsx
 const controller = new MonacoJsxSyntaxHighlight(getWorker(), monaco, {
@@ -40,7 +41,7 @@ const controller = new MonacoJsxSyntaxHighlight(getWorker(), monaco, {
 
 ### Use js worker file
 
-If your browser do not support to use blob worker, you can download the [worker file](https://github.com/x-glorious/monaco-jsx-syntax-highlight/releases) and save it in your project
+If your browser does not support blob workers, you can download the [worker file](https://github.com/x-glorious/monaco-jsx-syntax-highlight/releases) and save it in your project
 
 - web worker has same-origin policy
 
@@ -72,6 +73,15 @@ editor.onDidChangeModelContent(() => {
   // content change, highlight
   highlighter()
 })
+```
+
+#### Dispose the worker
+
+The `dispose` returned by `highlighterBuilder` only removes the message listener for a single editor. When the whole highlighter is no longer needed (e.g. every editor has been disposed), call the **class-level `dispose`** to terminate the underlying worker and free its thread resources.
+
+```tsx
+// when the highlighter instance is no longer needed
+monacoJsxSyntaxHighlight.dispose()
 ```
 
 ```tsx
@@ -110,7 +120,7 @@ Use css class to highlight the jsx syntax
 
 ## FAQ
 
-### monaco do not **check** the jsx syntax
+### monaco does not **check** the jsx syntax
 
 You can try below config code
 
