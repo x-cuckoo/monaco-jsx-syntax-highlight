@@ -59,9 +59,10 @@ export class MonacoJsxSyntaxHighlight {
       blob = blob.getBlob()
     }
 
-    const worker = new Worker(URL.createObjectURL(blob))
-    // free
-    URL.revokeObjectURL(blob)
+    const objectUrl = URL.createObjectURL(blob)
+    const worker = new Worker(objectUrl)
+    // worker has started loading from the url, safe to free it now
+    URL.revokeObjectURL(objectUrl)
 
     return worker
   }
@@ -114,6 +115,15 @@ export class MonacoJsxSyntaxHighlight {
         this.worker.removeEventListener('message', disposeMessage)
       }
     }
+  }
+
+  /**
+   * Terminate the worker and free its thread resources
+   * - Call when the highlighter instance is no longer needed (e.g. all editors are disposed)
+   * - To clean up a single editor, use the dispose returned by highlighterBuilder
+   */
+  public dispose = () => {
+    this.worker.terminate()
   }
 }
 

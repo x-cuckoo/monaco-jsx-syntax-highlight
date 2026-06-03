@@ -31,7 +31,7 @@ const controller = new MonacoJsxSyntaxHighlight(getWorker(), monaco)
 
 When using `getWorker` return value as Worker, we can **customize the typescript compile source file url** (for the purpose of **speeding up** load time)
 
-If not set, the default source is https://cdnjs.cloudflare.com/ajax/libs/typescript/4.6.4/typescript.min.js
+If not set, the default source is https://cdnjs.cloudflare.com/ajax/libs/typescript/5.9.2/typescript.min.js
 
 ```tsx
 const controller = new MonacoJsxSyntaxHighlight(getWorker(), monaco, {
@@ -73,6 +73,15 @@ editor.onDidChangeModelContent(() => {
   // content change, highlight
   highlighter()
 })
+```
+
+#### Dispose the worker
+
+The `dispose` returned by `highlighterBuilder` only removes the message listener for a single editor. When the whole highlighter is no longer needed (e.g. every editor has been disposed), call the **class-level `dispose`** to terminate the underlying worker and free its thread resources.
+
+```tsx
+// when the highlighter instance is no longer needed
+monacoJsxSyntaxHighlight.dispose()
 ```
 
 ```tsx
